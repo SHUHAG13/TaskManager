@@ -1,32 +1,41 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using TaskManager.Application.Interfaces;
+using TaskManager.Domain.Entities;
 using TaskManager.Web.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+
 
 namespace TaskManager.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ITaskService _taskService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ITaskService taskService)
         {
-            _logger = logger;
+            _taskService = taskService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            var allTasks = await _taskService.GetAllAsync();
+            var today = DateTime.Today;
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+            var model = new HomeViewModel
+            {
+                TotalTasks = allTasks.Count(),
+                CompletedTasks = allTasks.Count(t => t.IsCompleted),
+                PendingTasks = allTasks.Count(t => !t.IsCompleted),
+                TodayTasks = allTasks.Count(t => t.DueDate.Date == today),
+                RecentTasks = allTasks
+                                .OrderByDescending(t => t.DueDate)
+                                .Take(3)
+                                .ToList()
+            };
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(model);
         }
     }
 }

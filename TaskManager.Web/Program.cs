@@ -2,8 +2,7 @@
 using TaskManager.Application.Interfaces;
 using TaskManager.Infrastructure.Data;
 using TaskManager.Infrastructure.Services;
-
-
+using TaskManager.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 

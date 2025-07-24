@@ -1,8 +1,65 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model TaskManager.Web.Models.HomeViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h2 class="mb-4">📊 Task Overview</h2>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5>Total Tasks</h5>
+                <h2>@Model.TotalTasks</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5>Completed</h5>
+                <h2>@Model.CompletedTasks</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5>Pending</h5>
+                <h2>@Model.PendingTasks</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5>Due Today</h5>
+                <h2>@Model.TodayTasks</h2>
+            </div>
+        </div>
+    </div>
 </div>
+
+<h4>🗂️ Recent Tasks</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Priority</th>
+            <th>Due Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model.RecentTasks)
+        {
+            <tr>
+                <td>@task.Title</td>
+                <td>@task.Priority</td>
+                <td>@task.DueDate.ToShortDateString()</td>
+                <td>@(task.IsCompleted ? "✔️ Completed" : "⏳ Pending")</td>
+            </tr>
+        }
+    </tbody>
+</table>
