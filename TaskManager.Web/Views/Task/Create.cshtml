@@ -1,5 +1,29 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model TaskManager.Domain.Entities.TaskItem
+<h2>Create New Task</h2>
+<form asp-action="Create">
+	<div class="form-group">
+		<label>Title</label>
+		<input asp-for="Title" class="form-control" required />
+	</div>
+
+	<div class="form-group">
+		<label>Description</label>
+		<textarea asp-for="Description" class="form-control"></textarea>
+	</div>
+
+	<div class="form-group">
+		<label>Due Date</label>
+		<input asp-for="DueDate" type="date" class="form-control"/>
+	</div>
+	<div class="form-group">
+		<label>Priority</label>
+		<select asp-for="Priority" class="form-control"
+		asp-items="Html.GetEnumSelectList<TaskManager.Domain.Enums.PriorityLevel>()"></select>
+	</div>
+
+	<div class="form-group form-check">
+		<input asp-for="IsCompleted" type="checkbox" class="form-check-input" />
+		<label asp-for="IsCompleted" class="form-check-label">Completed</label>
+	</div>
+	<button type="submit" class="btn btn-primary">Save</button>
+</form>
